@@ -1,29 +1,39 @@
-package com.luko.javaspringapi.models;
+package com.luko.javaspringapi.dto;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.UUID;
 
 @Data
-public class Patient {
+@Builder
+public class PatientDto {
     private UUID id;
     private String firstName;
     private String lastName;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate dob;
     private String ssn;
     private String phoneNumber;
+    private Integer age;
 
-    public Patient() {
+    public PatientDto() {
     }
 
-    public Patient(UUID id, String firstName, String lastName, LocalDate dob, String ssn, String phoneNumber) {
+    public PatientDto(UUID id, String firstName, String lastName, LocalDate dob, String ssn, String phoneNumber) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dob = dob;
         this.ssn = ssn;
         this.phoneNumber = phoneNumber;
+        this.age = age;
     }
 
     public UUID getId() {
@@ -43,6 +53,9 @@ public class Patient {
     }
 
     public String getLastName() {
+        if (lastName != null){
+            return  lastName.replaceAll("." ,"*");
+        }
         return lastName;
     }
 
@@ -59,6 +72,9 @@ public class Patient {
     }
 
     public String getSsn() {
+        if (ssn != null){
+            return  ssn.replaceAll("\\d", "*");
+        }
         return ssn;
     }
 
@@ -73,4 +89,15 @@ public class Patient {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public Integer getAge() {
+        if(this.getDob()!= null)
+            return Period.between(this.getDob(), LocalDate.now()).getYears();
+        return null;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
 }

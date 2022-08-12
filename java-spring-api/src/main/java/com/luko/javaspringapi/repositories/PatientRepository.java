@@ -1,35 +1,54 @@
 package com.luko.javaspringapi.repositories;
 
+import com.luko.javaspringapi.dto.PatientDto;
 import com.luko.javaspringapi.models.Patient;
-import jdk.jshell.spi.ExecutionControl;
+import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public class PatientRepository {
-    // TODO: Once the patient model is complete add some test patients here, 3 should be fine.
     private List<Patient> patients = new ArrayList<>(){{
-        add(new Patient());
-        add(new Patient());
-        add(new Patient());
+        add(new Patient(UUID.randomUUID(),"peter","parker", LocalDate.now(),
+                "111-222-3333","12345"));
+        add(new Patient(UUID.randomUUID(),"bruce","wayne", LocalDate.now(),
+                "123-222-3333","23456"));
+        add(new Patient(UUID.randomUUID(),"stephen","strange", LocalDate.now(),
+                "123-222-3333","12345"));
     }};
 
-    // TODO: Implement these methods
-
     public List<Patient> getPatients() {
-        return null;
-    }
-
-    public Patient getPatient(UUID id) {
-        return null;
+        return patients;
     }
 
     public void save(Patient patient) {
-
+        patients.add(patient);
     }
 
-    public void delete(UUID id) {
+    public Optional<Patient> getPatientById(UUID patientId) {
+        Optional<Patient> patient = patients.stream().filter(x-> x.getId().compareTo(patientId) == 0).findFirst();
+        return patient;
+    }
 
+
+    public Optional<Patient> updatePatient(UUID patientId, PatientDto patientDto) {
+        this.patients.forEach(x -> {
+            if(x.getId().compareTo(patientId) == 0){
+                x.setPhoneNumber(patientDto.getPhoneNumber());
+                x.setLastName(patientDto.getLastName());
+            }
+        });
+       return getPatientById(patientId);
+    }
+
+    public void deletePatient(UUID patientId) {
+        Optional<Patient> patient = patients.stream().filter(x-> x.getId().equals(patientId)).findFirst();
+        if(patient.isPresent()) {
+            patients.remove(patient.get());
+        }
     }
 }
