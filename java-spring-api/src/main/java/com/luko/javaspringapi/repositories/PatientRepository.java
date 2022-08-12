@@ -14,11 +14,11 @@ import java.util.UUID;
 public class PatientRepository {
     private List<Patient> patients = new ArrayList<>(){{
         add(new Patient(UUID.randomUUID(),"peter","parker", LocalDate.now(),
-                "111-222-3333","12345"));
+                "111-222-3334","1234500"));
         add(new Patient(UUID.randomUUID(),"bruce","wayne", LocalDate.now(),
-                "123-222-3333","23456"));
+                "123-222-3335","2345600"));
         add(new Patient(UUID.randomUUID(),"stephen","strange", LocalDate.now(),
-                "123-222-3333","12345"));
+                "123-222-3336","5432100"));
     }};
 
     public List<Patient> getPatients() {
